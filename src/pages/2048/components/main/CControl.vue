@@ -18,7 +18,7 @@ function clickUndo() {
 }
 
 function clickSwap() {
-  if (!n_swap || mode.value === 'swap') return
+  if (!n_swap.value || mode.value === 'swap') return
   mode.value = 'swap'
 
   const close = message({
@@ -42,7 +42,7 @@ function clickSwap() {
 }
 
 function clickRemove() {
-  if (!n_remove || mode.value === 'remove') return
+  if (!n_remove.value || mode.value === 'remove') return
   mode.value = 'remove'
 
   const close = message({
