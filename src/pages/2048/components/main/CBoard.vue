@@ -1,11 +1,19 @@
 <script setup lang="tsx">
-import { reactive, ref, onMounted, onBeforeUnmount, inject } from 'vue'
+import { reactive, ref, onMounted, onBeforeUnmount, onActivated, onDeactivated, inject } from 'vue'
 
 import { type UseGameReturn } from '../../utils/game'
 import { type Direction } from '../../utils/board'
 import { useSelect } from '../../utils/select'
 
 const { running, isFailed, board, handleMove } = inject<UseGameReturn>('game')!
+
+onActivated(() => {
+  running.value = true
+})
+
+onDeactivated(() => {
+  running.value = false
+})
 
 window.addEventListener('keydown', (e) => {
   if (!running.value || isFailed.value) return
