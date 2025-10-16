@@ -1,10 +1,14 @@
 <script setup lang="tsx">
-import { type SetupContext, inject, ref, watch } from 'vue'
+import { type SetupContext, inject, ref, computed, watch } from 'vue'
 
+import { useRoute } from 'vue-router'
 import { type UseGameReturn } from '../../utils/game'
 import { showNewGameConfirm } from '../feedback'
 import CMenu from './CMenu.vue'
 import CScore from './CScore.vue'
+
+const route = useRoute()
+const isNotTutorial = computed(() => route.path !== '/2048/tutorial')
 
 const { running, score, best, newGame } = inject<UseGameReturn>('game')!
 
@@ -56,10 +60,15 @@ function MenuEntry(_: unknown, { slots }: SetupContext) {
         <menu-entry>
           <icon icon="ic:round-menu" class="size-6" />
         </menu-entry>
-        <h1 class="text-3xl font-black">2048</h1>
-        <icon icon="ic:round-refresh" class="size-6 cursor-pointer" @click="confirmAndNewGame" />
+        <h1 v-if="isNotTutorial" class="text-3xl font-black">2048</h1>
+        <icon
+          v-if="isNotTutorial"
+          icon="ic:round-refresh"
+          class="size-6 cursor-pointer"
+          @click="confirmAndNewGame"
+        />
       </div>
-      <div class="flex-between gap-2 px-4">
+      <div v-if="isNotTutorial" class="flex-between gap-2 px-4">
         <c-score label="SCORE" :value="score" show-delta class="flex-1 bg-stone-200" />
         <c-score label="BEST" :value="best" class="flex-1 border-3 border-stone-200" />
       </div>
@@ -73,11 +82,12 @@ function MenuEntry(_: unknown, { slots }: SetupContext) {
             <h1 class="text-4xl font-black">2048</h1>
           </div>
         </menu-entry>
-        <div class="flex-between gap-3">
+        <div v-if="isNotTutorial" class="flex-between gap-3">
           <c-score label="SCORE" :value="score" show-delta class="score flex-1 bg-stone-200" />
           <c-score label="BEST" :value="best" class="score flex-1 border-3 border-stone-200" />
         </div>
         <div
+          v-if="isNotTutorial"
           class="cursor-pointer rounded-lg bg-stone-500 p-2 text-gray-100"
           @click="confirmAndNewGame"
         >
