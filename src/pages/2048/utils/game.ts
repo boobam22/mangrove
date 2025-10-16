@@ -48,8 +48,8 @@ export function useGame(key: string) {
   }
 
   function handleMove(direction: Direction) {
-    const snapshot = game.board.toJSON()
     clearRemovedTiles()
+    const snapshot = game.board.toJSON()
     const { dirty, merges } = game.board.handleMove(direction)
 
     if (dirty) {
@@ -90,16 +90,16 @@ export function useGame(key: string) {
   }
 
   function swapTile(pos1: number, pos2: number) {
+    clearRemovedTiles()
     if (game.n_swap && game.board.swap(pos1, pos2)) {
       game.n_swap--
-      clearRemovedTiles()
     }
   }
 
   function removeTile(pos: number) {
+    clearRemovedTiles()
     if (game.n_delete && game.board.remove(pos)) {
       game.n_delete--
-      clearRemovedTiles()
     }
   }
 
