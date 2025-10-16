@@ -18,6 +18,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'tutorial',
         component: () => import('./PTutorial.vue'),
+        meta: { noKeepAlive: false },
       },
       {
         path: 'plus',

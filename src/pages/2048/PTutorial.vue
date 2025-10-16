@@ -1,5 +1,5 @@
 <script setup lang="tsx">
-import { type WatchSource, ref, watch, provide, onActivated } from 'vue'
+import { type WatchSource, ref, watch, provide, onMounted } from 'vue'
 
 import { useGame } from './utils/game'
 import { useSelect } from './utils/select'
@@ -9,7 +9,7 @@ import PageMain from './components/main/index.vue'
 const game = useGame('tutorial')
 provide('game', game)
 
-const step = ref(-1)
+const step = ref(1)
 
 function onChange(source: WatchSource): Promise<void> {
   return new Promise((resolve) => {
@@ -24,14 +24,13 @@ function onChange(source: WatchSource): Promise<void> {
   })
 }
 
-onActivated(async () => {
-  game.newGame()
-  game.board.value.tutorial()
-  game.n_undo.value = 0
-  game.n_swap.value = 0
-  game.n_remove.value = 0
+game.newGame()
+game.board.value.tutorial()
+game.n_undo.value = 0
+game.n_swap.value = 0
+game.n_remove.value = 0
 
-  step.value = 1
+onMounted(async () => {
   await onChange(game.moves)
   await onChange(game.score)
   await onChange(() => game.board.value.data.findIndex((tile) => tile.value === 8))
