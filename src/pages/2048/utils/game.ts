@@ -13,7 +13,7 @@ export function useGame(key: string) {
     moves: 0,
     n_undo: 2,
     n_swap: 1,
-    n_delete: 0,
+    n_remove: 0,
     isWin: false as boolean,
     isFailed: false as boolean,
     board: (s) => {
@@ -34,7 +34,7 @@ export function useGame(key: string) {
     game.moves = 0
     game.n_undo = 112
     game.n_swap = 111
-    game.n_delete = 110
+    game.n_remove = 110
     game.isWin = false
     game.isFailed = false
     game.history.clear()
@@ -62,7 +62,7 @@ export function useGame(key: string) {
         } else if (value === 512) {
           game.n_swap++
         } else if (value === 1024) {
-          game.n_delete++
+          game.n_remove++
         } else if (!game.isWin && value === 2048) {
           game.isWin = true
         }
@@ -95,7 +95,7 @@ export function useGame(key: string) {
         game.n_undo--
         game.board.load(snapshot!)
         if (type === 'swap') game.n_swap++
-        if (type === 'remove') game.n_delete++
+        if (type === 'remove') game.n_remove++
       }
     }
   }
@@ -113,8 +113,8 @@ export function useGame(key: string) {
   function removeTile(pos: number) {
     clearRemovedTiles()
     const snapshot = game.board.toJSON()
-    if (game.n_delete && game.board.remove(pos)) {
-      game.n_delete--
+    if (game.n_remove && game.board.remove(pos)) {
+      game.n_remove--
       game.n_undo++
       game.history.push(['remove', snapshot])
     }

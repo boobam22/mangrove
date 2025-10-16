@@ -6,7 +6,7 @@ import { useSelect } from '../../utils/select'
 import { message } from '../feedback'
 import CButton from './CButton.vue'
 
-const { n_undo, n_swap, n_delete, undo, swapTile, removeTile } = inject<UseGameReturn>('game')!
+const { n_undo, n_swap, n_remove, undo, swapTile, removeTile } = inject<UseGameReturn>('game')!
 
 const mode = ref<'remove' | 'swap' | 'normal'>('normal')
 
@@ -42,7 +42,7 @@ function clickSwap() {
 }
 
 function clickRemove() {
-  if (!n_delete || mode.value === 'remove') return
+  if (!n_remove || mode.value === 'remove') return
   mode.value = 'remove'
 
   const close = message({
@@ -91,7 +91,7 @@ function cancel() {
       title="DELETE TILE BY NUMBER"
       desc="Make a 1024 tile to get more uses"
       :active="mode === 'remove'"
-      :n="n_delete"
+      :n="n_remove"
       @click="clickRemove"
       @cancel="cancel"
     />
