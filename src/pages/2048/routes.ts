@@ -13,11 +13,12 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'classic',
-        component: () => import('./PHome.vue'),
+        component: () => import('./PClassic.vue'),
       },
       {
         path: 'tutorial',
         component: () => import('./PTutorial.vue'),
+        meta: { noKeepAlive: false },
       },
       {
         path: 'plus',

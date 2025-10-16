@@ -55,6 +55,7 @@ export function useGame(key: string) {
     tiles.splice(0, tiles.length, ...tiles.filter((tile) => !tile.removed))
   }
 
+  let score = 0
   function handleMove(direction: Direction) {
     clearRemovedTiles()
     const snapshot = game.board.toJSON()
@@ -62,8 +63,10 @@ export function useGame(key: string) {
 
     if (dirty) {
       game.moves++
+      score = 0
       merges.forEach((value) => {
-        game.score += value
+        score += value
+        game.score += score
 
         if (value === 128) {
           game.n_undo++
@@ -103,6 +106,8 @@ export function useGame(key: string) {
       if (type) {
         game.n_undo--
         game.board.load(snapshot!)
+
+        if (type === 'move') game.score -= score
         if (type === 'swap') game.n_swap++
         if (type === 'remove') game.n_remove++
       }

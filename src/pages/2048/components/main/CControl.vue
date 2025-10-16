@@ -10,7 +10,7 @@ const { n_undo, n_swap, n_remove, undo, swapTile, removeTile } = inject<UseGameR
 
 const mode = ref<'remove' | 'swap' | 'normal'>('normal')
 
-const { selected, waitUntil } = useSelect('main')
+const { selected, waitUntil } = useSelect()
 
 function clickUndo() {
   mode.value = 'normal'
@@ -18,7 +18,7 @@ function clickUndo() {
 }
 
 function clickSwap() {
-  if (!n_swap || mode.value === 'swap') return
+  if (!n_swap.value || mode.value === 'swap') return
   mode.value = 'swap'
 
   const close = message({
@@ -42,7 +42,7 @@ function clickSwap() {
 }
 
 function clickRemove() {
-  if (!n_remove || mode.value === 'remove') return
+  if (!n_remove.value || mode.value === 'remove') return
   mode.value = 'remove'
 
   const close = message({
@@ -69,7 +69,9 @@ function cancel() {
 </script>
 
 <template>
-  <div class="relative z-0 mx-auto mt-20 flex w-fit gap-3 rounded-2xl bg-stone-400 p-3 pb-6">
+  <div
+    class="fixed bottom-20 left-1/2 z-0 flex w-fit -translate-x-1/2 gap-3 rounded-2xl bg-stone-400 p-3 pb-6"
+  >
     <c-button
       icon="ic:baseline-undo"
       title="UNDO"

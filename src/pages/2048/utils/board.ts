@@ -169,4 +169,9 @@ export default class Board {
         return this.move([3, 7, 11, 15], -1)
     }
   }
+
+  tutorial() {
+    this.clear()
+    this.push(new Tile(2, 5), new Tile(2, 10))
+  }
 }

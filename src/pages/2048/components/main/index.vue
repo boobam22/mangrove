@@ -1,8 +1,12 @@
 <script setup lang="tsx">
 import { ref, computed, watch, inject } from 'vue'
+import { useRoute } from 'vue-router'
 
 import { type UseGameReturn } from '../../utils/game'
 import CBoard from './CBoard.vue'
+import CControl from './CControl.vue'
+
+const route = useRoute()
 
 const { running, score, moves, isWin, isFailed, newGame } = inject<UseGameReturn>('game')!
 
@@ -32,22 +36,26 @@ function CButton(props: { text: string; onClick?: () => void }) {
 </script>
 
 <template>
-  <div>
-    <div v-if="showResult" class="text-center text-lg text-yellow-900">
+  <div class="my-24">
+    <div v-if="showResult" class="mb-4 text-center text-lg text-yellow-900">
       <h1 class="text-4xl font-bold">{{ isWin ? 'You Win' : 'Game Over' }}</h1>
       <p>
         <strong>{{ score }}</strong> points scored in <strong>{{ moves }}</strong> moves.
       </p>
     </div>
 
-    <c-board class="mx-auto my-12" />
+    <c-board />
 
-    <div v-if="showResult && isFailed">
-      <c-button text="Play Again" @click="newGame" />
+    <div v-if="showResult" class="mt-8">
+      <div v-if="isFailed">
+        <c-button text="Play Again" @click="newGame" />
+      </div>
+      <div v-else>
+        <c-button text="Continue Play" @click="((continuePlay = true), (running = true))" />
+        <c-button text="New Game" @click="newGame" />
+      </div>
     </div>
-    <div v-else-if="showResult">
-      <c-button text="Continue Play" @click="((continuePlay = true), (running = true))" />
-      <c-button text="New Game" @click="newGame" />
-    </div>
+
+    <c-control v-else-if="route.path !== '/2048/classic'"></c-control>
   </div>
 </template>

@@ -5,7 +5,7 @@ import { useGame } from './utils/game'
 import PageHeader from './components/header/index.vue'
 import PageMain from './components/main/index.vue'
 
-provide('game', useGame('main'))
+provide('game', useGame('classic'))
 </script>
 
 <template>
