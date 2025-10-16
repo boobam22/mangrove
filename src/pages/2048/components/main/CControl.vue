@@ -69,7 +69,9 @@ function cancel() {
 </script>
 
 <template>
-  <div class="relative z-0 mx-auto mt-20 flex w-fit gap-3 rounded-2xl bg-stone-400 p-3 pb-6">
+  <div
+    class="fixed bottom-20 left-1/2 z-0 flex w-fit -translate-x-1/2 gap-3 rounded-2xl bg-stone-400 p-3 pb-6"
+  >
     <c-button
       icon="ic:baseline-undo"
       title="UNDO"

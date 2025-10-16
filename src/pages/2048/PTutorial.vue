@@ -1,16 +1,15 @@
 <script setup lang="tsx">
-import { type WatchSource, ref, watch, provide, onMounted } from 'vue'
+import { type WatchSource, ref, watch, provide, onActivated } from 'vue'
 
 import { useGame } from './utils/game'
 import { useSelect } from './utils/select'
 import PageHeader from './components/header/index.vue'
 import PageMain from './components/main/index.vue'
-import CControl from './components/main/CControl.vue'
 
 const game = useGame('tutorial')
 provide('game', game)
 
-const step = ref(0)
+const step = ref(-1)
 
 function onChange(source: WatchSource): Promise<void> {
   return new Promise((resolve) => {
@@ -25,10 +24,14 @@ function onChange(source: WatchSource): Promise<void> {
   })
 }
 
-onMounted(async () => {
+onActivated(async () => {
   game.newGame()
   game.board.value.tutorial()
+  game.n_undo.value = 0
+  game.n_swap.value = 0
+  game.n_remove.value = 0
 
+  step.value = 1
   await onChange(game.moves)
   await onChange(game.score)
   await onChange(() => game.board.value.data.findIndex((tile) => tile.value === 8))
@@ -36,8 +39,6 @@ onMounted(async () => {
 
   game.running.value = false
   game.n_undo.value = 1
-  game.n_swap.value = 0
-  game.n_remove.value = 0
   await onChange(game.n_undo)
 
   game.n_swap.value++
@@ -66,10 +67,9 @@ function CNumber(props: { value: string }) {
 
 <template>
   <div class="select-none">
-    <page-header class="fixed top-0"></page-header>
     <div
       v-if="step > 0 && !selecting"
-      class="mx-auto mt-4 w-110 rounded-xl bg-stone-700 p-4 text-lg text-slate-100"
+      class="fixed top-4 left-1/2 mx-auto w-110 -translate-x-1/2 rounded-xl bg-stone-700 p-4 text-lg text-slate-100"
     >
       <div v-if="step === 1">
         <c-title text="Welcome to 2048" />
@@ -111,7 +111,6 @@ function CNumber(props: { value: string }) {
         <p>Undo isn't the only powerup you can use. Try “Swap Two Tiles”!</p>
       </div>
     </div>
-
     <teleport v-if="step === 0" to="body">
       <div class="fixed top-0 z-10 h-full w-full bg-neutral-800/50">
         <div
@@ -138,7 +137,7 @@ function CNumber(props: { value: string }) {
       </div>
     </teleport>
 
+    <page-header></page-header>
     <page-main></page-main>
-    <c-control v-if="step >= 5"></c-control>
   </div>
 </template>

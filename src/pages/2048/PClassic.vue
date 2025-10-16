@@ -11,6 +11,6 @@ provide('game', useGame('classic'))
 <template>
   <div class="select-none">
     <page-header></page-header>
-    <page-main></page-main>
+    <page-main class="mt-12"></page-main>
   </div>
 </template>

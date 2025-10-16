@@ -1,5 +1,5 @@
 <template>
-  <router-view v-slot="{ Component }" class="min-h-screen bg-stone-100">
+  <router-view v-slot="{ Component }" class="min-h-screen overflow-hidden bg-stone-100">
     <keep-alive>
       <component :is="Component" />
     </keep-alive>
