@@ -21,7 +21,7 @@ export function useGame(key: string) {
       if (!s) board.addTile(3)
       return board
     },
-    history: (s) => FixedArray.fromJSON<string>(s, 5),
+    history: (s) => FixedArray.fromJSON<['move' | 'swap' | 'remove', string]>(s, 5),
   })
 
   const state = reactive({
@@ -73,7 +73,16 @@ export function useGame(key: string) {
         game.isFailed = true
       }
 
-      game.history.push(snapshot)
+      const latest = game.history.pop()
+      if (latest) {
+        if (latest[0] !== 'move') {
+          game.n_undo--
+        } else {
+          game.history.push(latest)
+        }
+      }
+
+      game.history.push(['move', snapshot])
     }
 
     return dirty
@@ -81,25 +90,33 @@ export function useGame(key: string) {
 
   function undo() {
     if (game.n_undo) {
-      const snapshot = game.history.pop()
-      if (snapshot) {
-        game.board.load(snapshot)
+      const [type, snapshot] = game.history.pop() || []
+      if (type) {
         game.n_undo--
+        game.board.load(snapshot!)
+        if (type === 'swap') game.n_swap++
+        if (type === 'remove') game.n_delete++
       }
     }
   }
 
   function swapTile(pos1: number, pos2: number) {
     clearRemovedTiles()
+    const snapshot = game.board.toJSON()
     if (game.n_swap && game.board.swap(pos1, pos2)) {
       game.n_swap--
+      game.n_undo++
+      game.history.push(['swap', snapshot])
     }
   }
 
   function removeTile(pos: number) {
     clearRemovedTiles()
+    const snapshot = game.board.toJSON()
     if (game.n_delete && game.board.remove(pos)) {
       game.n_delete--
+      game.n_undo++
+      game.history.push(['remove', snapshot])
     }
   }
 
