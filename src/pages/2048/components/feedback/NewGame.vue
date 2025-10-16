@@ -6,7 +6,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="fixed top-0 h-full w-full bg-neutral-800/50">
+  <div class="fixed top-0 z-10 h-full w-full bg-neutral-800/50">
     <div
       class="mx-auto mt-48 max-w-[500px] rounded-2xl bg-neutral-200 p-10 text-center text-lg text-yellow-900"
     >
