@@ -85,6 +85,7 @@ export function useGame(key: string) {
       if (latest) {
         if (latest[0] !== 'move') {
           game.n_undo--
+          while (game.history.pop()) {}
         } else {
           game.history.push(latest)
         }
