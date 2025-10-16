@@ -1,0 +1,97 @@
+<script setup lang="tsx">
+import { type SetupContext, inject, ref, watch } from 'vue'
+
+import { type UseGameReturn } from '../../utils/game'
+import { showNewGameConfirm } from '../feedback'
+import CMenu from './CMenu.vue'
+import CScore from './CScore.vue'
+
+const { running, score, best, newGame } = inject<UseGameReturn>('game')!
+
+watch(score, (newValue) => {
+  best.value = Math.max(newValue, best.value)
+})
+
+function confirmAndNewGame() {
+  const oldValue = running.value
+  running.value = false
+
+  showNewGameConfirm()
+    .then((confirm) => confirm && newGame())
+    .finally(() => {
+      running.value = oldValue
+    })
+}
+
+const showMenu = ref(false)
+
+window.addEventListener('click', () => {
+  if (showMenu.value) {
+    showMenu.value = false
+  }
+})
+
+function toggleMenu(e: MouseEvent) {
+  e.stopPropagation()
+  showMenu.value = !showMenu.value
+}
+
+function MenuEntry(_: unknown, { slots }: SetupContext) {
+  return (
+    <div
+      class={['relative z-10 rounded-lg hover:bg-stone-300', showMenu.value && 'bg-stone-300']}
+      onClick={toggleMenu}
+    >
+      {slots.default?.()}
+      {showMenu.value && <CMenu class="absolute top-full left-0 w-80 translate-y-2" />}
+    </div>
+  )
+}
+</script>
+
+<template>
+  <div class="text-yellow-900">
+    <div class="min-md:hidden">
+      <div class="flex-between p-2 sm:px-4">
+        <menu-entry>
+          <icon icon="ic:round-menu" class="size-6" />
+        </menu-entry>
+        <h1 class="text-3xl font-black">2048</h1>
+        <icon icon="ic:round-refresh" class="size-6 cursor-pointer" @click="confirmAndNewGame" />
+      </div>
+      <div class="flex-between gap-2 px-4">
+        <c-score label="SCORE" :value="score" show-delta class="flex-1 bg-stone-200" />
+        <c-score label="BEST" :value="best" class="flex-1 border-3 border-stone-200" />
+      </div>
+    </div>
+
+    <div class="max-md:hidden">
+      <div class="flex-between p-4">
+        <menu-entry>
+          <div class="flex-between gap-2 px-2">
+            <icon icon="ic:round-menu" class="size-6" />
+            <h1 class="text-4xl font-black">2048</h1>
+          </div>
+        </menu-entry>
+        <div class="flex-between gap-3">
+          <c-score label="SCORE" :value="score" show-delta class="score flex-1 bg-stone-200" />
+          <c-score label="BEST" :value="best" class="score flex-1 border-3 border-stone-200" />
+        </div>
+        <div
+          class="cursor-pointer rounded-lg bg-stone-500 p-2 text-gray-100"
+          @click="confirmAndNewGame"
+        >
+          New Game
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+@reference '@/assets/main.css';
+
+.score {
+  @apply px-4;
+}
+</style>
