@@ -46,7 +46,7 @@ onActivated(async () => {
   step.value = 0
 })
 
-const { selecting } = useSelect('main')
+const { selecting } = useSelect()
 
 function CTitle(props: { text: string }) {
   return <h1 class="text-xl font-bold uppercase">{props.text}</h1>

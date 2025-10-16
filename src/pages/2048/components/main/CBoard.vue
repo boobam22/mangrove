@@ -69,7 +69,7 @@ onBeforeUnmount(() => {
   if (observer) observer.disconnect()
 })
 
-const { selecting, selected, select, unselect } = useSelect('main')
+const { selecting, selected, select, unselect } = useSelect()
 
 function clickTile(pos: number) {
   if (!selecting.value) return

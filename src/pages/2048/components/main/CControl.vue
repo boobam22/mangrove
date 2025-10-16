@@ -10,7 +10,7 @@ const { n_undo, n_swap, n_remove, undo, swapTile, removeTile } = inject<UseGameR
 
 const mode = ref<'remove' | 'swap' | 'normal'>('normal')
 
-const { selected, waitUntil } = useSelect('main')
+const { selected, waitUntil } = useSelect()
 
 function clickUndo() {
   mode.value = 'normal'
