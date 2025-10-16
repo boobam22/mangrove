@@ -24,6 +24,10 @@ export function useGame(key: string) {
     history: (s) => FixedArray.fromJSON<['move' | 'swap' | 'remove', string]>(s, 5),
   })
 
+  if (import.meta.env.DEV) {
+    game.n_undo = game.n_swap = game.n_remove = 100
+  }
+
   const state = reactive({
     running: true,
   })
@@ -32,14 +36,18 @@ export function useGame(key: string) {
     state.running = true
     game.score = 0
     game.moves = 0
-    game.n_undo = 112
-    game.n_swap = 111
-    game.n_remove = 110
+    game.n_undo = 2
+    game.n_swap = 1
+    game.n_remove = 0
     game.isWin = false
     game.isFailed = false
     game.history.clear()
     game.board.clear()
     game.board.addTile(3)
+
+    if (import.meta.env.DEV) {
+      game.n_undo = game.n_swap = game.n_remove = 100
+    }
   }
 
   function clearRemovedTiles() {
