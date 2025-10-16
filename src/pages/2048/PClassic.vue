@@ -9,7 +9,7 @@ provide('game', useGame('classic'))
 </script>
 
 <template>
-  <div>
+  <div class="select-none">
     <page-header></page-header>
     <page-main></page-main>
   </div>
