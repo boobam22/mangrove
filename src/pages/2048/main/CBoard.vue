@@ -1,7 +1,7 @@
 <script setup lang="tsx">
 import { reactive, ref, inject, onMounted, onBeforeUnmount, onActivated, onDeactivated } from 'vue'
 
-import { type UseGameReturn } from '..//game'
+import { type UseGameReturn } from '../game'
 import { type Direction } from '../game/board'
 import { useSelect } from '../utils/select'
 
