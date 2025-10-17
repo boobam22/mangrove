@@ -1,14 +1,13 @@
 <script setup lang="tsx">
-import { type SetupContext, ref, computed, watch, inject } from 'vue'
-import { useRoute } from 'vue-router'
+import { type SetupContext, ref, watch, inject } from 'vue'
 
 import { type UseGameReturn } from '../game'
+import { useTutorial } from '../utils/tutorial'
 import { showNewGameConfirm } from './confirm'
 import CMenu from './CMenu.vue'
 import CScore from './CScore.vue'
 
-const route = useRoute()
-const isNotTutorial = computed(() => route.path !== '/2048/tutorial')
+const { isNotTutorial } = useTutorial()
 
 const { running, score, best, newGame } = inject<UseGameReturn>('game')!
 

@@ -3,6 +3,7 @@ import { ref, computed, inject } from 'vue'
 
 import { type UseGameReturn } from '../../game'
 import { useSelect } from '../../utils/select'
+import { useTutorial } from '../../utils/tutorial'
 import { message } from '../../message'
 import CButton from './CButton.vue'
 
@@ -66,10 +67,13 @@ function clickRemove() {
 function cancel() {
   mode.value = 'normal'
 }
+
+const { step, isNotTutorial } = useTutorial()
 </script>
 
 <template>
   <div
+    v-if="isNotTutorial || step > 4"
     class="fixed bottom-20 left-1/2 z-0 flex w-fit -translate-x-1/2 gap-3 rounded-2xl bg-stone-400 p-3 pb-6"
   >
     <c-button
@@ -80,6 +84,7 @@ function cancel() {
       @click="clickUndo"
     />
     <c-button
+      :class="[!isNotTutorial && step < 6 && 'opacity-0']"
       icon="ic:round-swap-vert"
       title="SWAP TWO TILES"
       desc="Make a 512 tile to get more uses"
@@ -89,6 +94,7 @@ function cancel() {
       @cancel="cancel"
     />
     <c-button
+      :class="[!isNotTutorial && step < 7 && 'opacity-0']"
       icon="ic:outline-delete"
       title="DELETE TILE BY NUMBER"
       desc="Make a 1024 tile to get more uses"
