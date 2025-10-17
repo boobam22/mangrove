@@ -1,9 +1,9 @@
 <script setup lang="tsx">
 import { ref, computed, inject } from 'vue'
 
-import { type UseGameReturn } from '../../utils/game'
+import { type UseGameReturn } from '../../game'
 import { useSelect } from '../../utils/select'
-import { message } from '../feedback'
+import { message } from '../../message'
 import CButton from './CButton.vue'
 
 const { n_undo, n_swap, n_remove, undo, swapTile, removeTile } = inject<UseGameReturn>('game')!

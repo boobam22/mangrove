@@ -1,10 +1,10 @@
 <script setup lang="tsx">
 import { type WatchSource, ref, watch, provide, onMounted } from 'vue'
 
-import { useGame } from './utils/game'
+import { useGame } from './game'
 import { useSelect } from './utils/select'
-import PageHeader from './components/header/index.vue'
-import PageMain from './components/main/index.vue'
+import PageHeader from './header/index.vue'
+import PageMain from './main/index.vue'
 
 const game = useGame('tutorial')
 provide('game', game)

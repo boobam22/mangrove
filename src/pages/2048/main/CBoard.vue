@@ -1,9 +1,9 @@
 <script setup lang="tsx">
-import { reactive, ref, onMounted, onBeforeUnmount, onActivated, onDeactivated, inject } from 'vue'
+import { reactive, ref, inject, onMounted, onBeforeUnmount, onActivated, onDeactivated } from 'vue'
 
-import { type UseGameReturn } from '../../utils/game'
-import { type Direction } from '../../utils/board'
-import { useSelect } from '../../utils/select'
+import { type UseGameReturn } from '..//game'
+import { type Direction } from '../game/board'
+import { useSelect } from '../utils/select'
 
 const { running, isFailed, board, handleMove } = inject<UseGameReturn>('game')!
 
