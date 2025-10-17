@@ -95,6 +95,6 @@ function CLink(props: { url?: string; text: string }) {
   animation-name: bounce;
   animation-timing-function: ease-in;
   animation-duration: 200ms;
-  animation-iteration-count: 2;
+  animation-iteration-count: 1;
 }
 </style>

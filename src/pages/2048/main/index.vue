@@ -2,9 +2,9 @@
 import { ref, computed, watch, inject } from 'vue'
 import { useRoute } from 'vue-router'
 
-import { type UseGameReturn } from '../../utils/game'
+import { type UseGameReturn } from '../game'
 import CBoard from './CBoard.vue'
-import CControl from './CControl.vue'
+import CControl from './control/index.vue'
 
 const route = useRoute()
 

@@ -1,14 +1,13 @@
 <script setup lang="tsx">
-import { type SetupContext, inject, ref, computed, watch } from 'vue'
+import { type SetupContext, ref, watch, inject } from 'vue'
 
-import { useRoute } from 'vue-router'
-import { type UseGameReturn } from '../../utils/game'
-import { showNewGameConfirm } from '../feedback'
+import { type UseGameReturn } from '../game'
+import { useTutorial } from '../utils/tutorial'
+import { showNewGameConfirm } from './confirm'
 import CMenu from './CMenu.vue'
 import CScore from './CScore.vue'
 
-const route = useRoute()
-const isNotTutorial = computed(() => route.path !== '/2048/tutorial')
+const { isNotTutorial } = useTutorial()
 
 const { running, score, best, newGame } = inject<UseGameReturn>('game')!
 
@@ -35,16 +34,14 @@ window.addEventListener('click', () => {
   }
 })
 
-function toggleMenu(e: MouseEvent) {
-  e.stopPropagation()
-  showMenu.value = !showMenu.value
-}
-
 function MenuEntry(_: unknown, { slots }: SetupContext) {
   return (
     <div
       class={['relative z-10 rounded-lg hover:bg-stone-300', showMenu.value && 'bg-stone-300']}
-      onClick={toggleMenu}
+      onClick={(e) => {
+        e.stopPropagation()
+        showMenu.value = !showMenu.value
+      }}
     >
       {slots.default?.()}
       {showMenu.value && <CMenu class="absolute top-full left-0 w-80 translate-y-2" />}

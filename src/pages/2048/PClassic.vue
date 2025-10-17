@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { provide } from 'vue'
 
-import { useGame } from './utils/game'
-import PageHeader from './components/header/index.vue'
-import PageMain from './components/main/index.vue'
+import { useGame } from './game'
+import PageHeader from './header/index.vue'
+import PageMain from './main/index.vue'
 
 provide('game', useGame('classic'))
 </script>

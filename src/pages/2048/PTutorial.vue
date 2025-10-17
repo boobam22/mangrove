@@ -1,15 +1,15 @@
 <script setup lang="tsx">
-import { type WatchSource, ref, watch, provide, onMounted } from 'vue'
-
-import { useGame } from './utils/game'
+import { type WatchSource, watch, provide, onMounted } from 'vue'
+import { useGame } from './game'
+import { useTutorial } from './utils/tutorial'
 import { useSelect } from './utils/select'
-import PageHeader from './components/header/index.vue'
-import PageMain from './components/main/index.vue'
+import PageHeader from './header/index.vue'
+import PageMain from './main/index.vue'
 
 const game = useGame('tutorial')
 provide('game', game)
 
-const step = ref(1)
+const { step } = useTutorial()
 
 function onChange(source: WatchSource): Promise<void> {
   return new Promise((resolve) => {
@@ -29,6 +29,7 @@ game.board.value.tutorial()
 game.n_undo.value = 0
 game.n_swap.value = 0
 game.n_remove.value = 0
+step.value = 1
 
 onMounted(async () => {
   await onChange(game.moves)
@@ -42,7 +43,8 @@ onMounted(async () => {
 
   game.n_swap.value++
   await onChange(game.n_swap)
-  step.value = 0
+  game.n_undo.value = 0
+  step.value = 100
 })
 
 const { selecting } = useSelect()
@@ -67,7 +69,7 @@ function CNumber(props: { value: string }) {
 <template>
   <div class="select-none">
     <div
-      v-if="step > 0 && !selecting"
+      v-if="step < 100 && !selecting"
       class="fixed top-4 left-1/2 mx-auto w-110 -translate-x-1/2 rounded-xl bg-stone-700 p-4 text-lg text-slate-100"
     >
       <div v-if="step === 1">
@@ -110,7 +112,7 @@ function CNumber(props: { value: string }) {
         <p>Undo isn't the only powerup you can use. Try “Swap Two Tiles”!</p>
       </div>
     </div>
-    <teleport v-if="step === 0" to="body">
+    <teleport v-if="step === 100" to="body">
       <div class="fixed top-0 z-10 h-full w-full bg-neutral-800/50">
         <div
           class="mx-auto mt-48 max-w-[500px] rounded-2xl bg-neutral-200 p-10 text-center text-lg text-yellow-900"
