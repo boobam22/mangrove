@@ -51,7 +51,6 @@ export default class Game {
     game.newGame()
 
     if (parsed instanceof Array) {
-      game.snapshot = parsed.pop()
       game.histories = parsed
       game.loadSnapshot()
     }

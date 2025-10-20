@@ -23,7 +23,7 @@ export const LocalStorageProvider = defineComponent({
     provide(KEY, storageValue)
 
     watch(storageValue, (newValue) => {
-      storageValue.value = newValue
+      window.localStorage.setItem(storageKey, newValue)
     })
 
     function handleStorage(e: StorageEvent) {
