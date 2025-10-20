@@ -7,6 +7,8 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import tailwindcss from '@tailwindcss/vite'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
+const isDev = process.env.NODE_ENV === 'development'
+
 export default defineConfig({
   plugins: [vue(), vueJsx(), tailwindcss(), vueDevTools()],
   resolve: {
@@ -15,7 +17,7 @@ export default defineConfig({
     },
   },
   esbuild: {
-    drop: ['console', 'debugger'],
+    drop: !isDev ? ['console', 'debugger'] : [],
   },
   build: {
     rollupOptions: {
