@@ -22,7 +22,7 @@ export const TutorialProvider = defineComponent({
 })
 
 export function useTutorial() {
-  const context = inject<TutorialContext>(KEY)
+  const context = inject<TutorialContext>(KEY, { step: ref(0), isNotTutorial: ref(true) })
   if (context === undefined) {
     throw new Error('useTutorial must be used within a TutorialProvider')
   }

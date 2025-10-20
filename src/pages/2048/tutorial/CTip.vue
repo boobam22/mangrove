@@ -31,12 +31,8 @@ onMounted(async () => {
   await onChange(() => board.value.findIndex((tile) => tile.value === 16))
 
   running.value = false
-  n_undo.value = 1
   await onChange(n_undo)
-
-  n_swap.value++
   await onChange(n_swap)
-  n_undo.value = 0
   step.value = 100
 })
 
@@ -60,7 +56,7 @@ function CNumber(props: { value: string }) {
 </script>
 
 <template>
-  <div class="select-none">
+  <div>
     <div
       v-if="step < 100 && !selecting"
       class="fixed top-4 left-1/2 mx-auto w-110 -translate-x-1/2 rounded-xl bg-stone-700 p-4 text-lg text-slate-100"

@@ -4,6 +4,8 @@ import { useRoute } from 'vue-router'
 
 import { useGame } from '../game'
 import { SelectProvider } from '../select'
+import { useTutorial } from '../tutorial'
+import CTip from '../tutorial/CTip.vue'
 import CHeader from './header/index.vue'
 import CBoard from './CBoard.vue'
 import CControl from './control/index.vue'
@@ -14,6 +16,8 @@ const { running, score, moves, isWin, isFailed, newGame } = useGame()
 
 const continuePlay = ref(false)
 const showResult = computed(() => isFailed.value || (isWin.value && !continuePlay.value))
+
+const { isNotTutorial } = useTutorial()
 
 watch([isWin, isFailed], () => {
   if (!isWin) {
@@ -41,6 +45,7 @@ function CButton(props: { text: string; onClick?: () => void }) {
   <div class="select-none">
     <select-provider>
       <c-header></c-header>
+      <c-tip v-if="!isNotTutorial" class="mb-24"></c-tip>
 
       <div v-if="showResult" class="mb-4 text-center text-lg text-yellow-900">
         <h1 class="text-4xl font-bold">{{ isWin ? 'You Win' : 'Game Over' }}</h1>

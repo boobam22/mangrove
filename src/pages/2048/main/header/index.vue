@@ -2,7 +2,7 @@
 import { type SetupContext, ref, watch } from 'vue'
 
 import { useGame } from '../../game'
-import { useTutorial } from '../../utils/tutorial'
+import { useTutorial } from '../../tutorial'
 import { showNewGameConfirm } from './confirm'
 import CMenu from './CMenu.vue'
 import CScore from './CScore.vue'

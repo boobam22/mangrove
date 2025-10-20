@@ -169,15 +169,7 @@ export default class Game {
   }
 
   tutorial() {
-    this.running = true
-    this.score = 0
-    this.moves = 0
-    this.n_undo = 0
-    this.n_swap = 0
-    this.n_remove = 0
-    this.isWin = false
-    this.isFailed = false
+    this.newGame()
     this.board.data = [new Tile(2, 5), new Tile(2, 10)]
-    this.histories = []
   }
 }
