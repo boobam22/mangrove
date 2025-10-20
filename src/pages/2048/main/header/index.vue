@@ -1,15 +1,15 @@
 <script setup lang="tsx">
-import { type SetupContext, ref, watch, inject } from 'vue'
+import { type SetupContext, ref, watch } from 'vue'
 
-import { type UseGameReturn } from '../game'
-import { useTutorial } from '../utils/tutorial'
+import { useGame } from '../../game'
+import { useTutorial } from '../../tutorial'
 import { showNewGameConfirm } from './confirm'
 import CMenu from './CMenu.vue'
 import CScore from './CScore.vue'
 
 const { isNotTutorial } = useTutorial()
 
-const { running, score, best, newGame } = inject<UseGameReturn>('game')!
+const { running, score, best, newGame } = useGame()
 
 watch(score, (newValue) => {
   best.value = Math.max(newValue, best.value)

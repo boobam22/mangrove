@@ -1,13 +1,13 @@
 <script setup lang="tsx">
-import { ref, computed, inject } from 'vue'
+import { ref, computed } from 'vue'
 
-import { type UseGameReturn } from '../../game'
-import { useSelect } from '../../utils/select'
-import { useTutorial } from '../../utils/tutorial'
+import { useGame } from '../../game'
+import { useSelect } from '../../select'
+import { useTutorial } from '../../tutorial'
 import { message } from '../../message'
 import CButton from './CButton.vue'
 
-const { n_undo, n_swap, n_remove, undo, swapTile, removeTile } = inject<UseGameReturn>('game')!
+const { n_undo, n_swap, n_remove, undo, swapTile, removeTile } = useGame()
 
 const mode = ref<'remove' | 'swap' | 'normal'>('normal')
 
@@ -81,6 +81,7 @@ const { step, isNotTutorial } = useTutorial()
       title="UNDO"
       desc="Make a 128 tile to get more uses"
       :n="n_undo"
+      :bounce="step === 5"
       @click="clickUndo"
     />
     <c-button
@@ -90,6 +91,7 @@ const { step, isNotTutorial } = useTutorial()
       desc="Make a 512 tile to get more uses"
       :active="mode === 'swap'"
       :n="n_swap"
+      :bounce="step === 6"
       @click="clickSwap"
       @cancel="cancel"
     />

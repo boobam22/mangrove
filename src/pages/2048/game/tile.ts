@@ -1,5 +1,5 @@
 export default class Tile {
-  static count = 0
+  private static count = 0
   static readonly EMPTY = new Tile()
 
   id
@@ -12,6 +12,21 @@ export default class Tile {
     this.value = value
     this.pos = pos
     this.removed = false
+  }
+
+  move(pos: number) {
+    if (this.pos !== pos) {
+      this.pos = pos
+      return true
+    }
+    return false
+  }
+
+  merge(tile: Tile) {
+    tile.move(this.pos)
+    tile.removed = true
+    this.removed = true
+    return new Tile(this.value + tile.value, this.pos)
   }
 
   equals(tile: Tile) {
@@ -29,6 +44,10 @@ export default class Tile {
       .filter((n) => !isNaN(n))
 
     if (id) {
+      if (id >= Tile.count) {
+        Tile.count = id + 1
+      }
+
       const tile = new Tile(value, pos)
       tile.id = id
       tile.removed = Boolean(removed)

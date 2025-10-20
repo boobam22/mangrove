@@ -1,14 +1,11 @@
 <script setup lang="ts">
-import { useTutorial } from '../../utils/tutorial'
-
-const { isNotTutorial } = useTutorial()
-
 defineProps({
   title: { type: String, default: '' },
   desc: { type: String, default: '' },
   icon: { type: String, default: '' },
   n: { type: Number, default: 0 },
   active: { type: Boolean, default: false },
+  bounce: { type: Boolean, default: false },
 })
 
 const emit = defineEmits<{
@@ -22,7 +19,7 @@ const emit = defineEmits<{
       :class="[
         'peer cursor-pointer rounded-xl bg-stone-500 p-3 text-slate-100 transition-transform',
         active ? '-translate-y-15' : 'hover:-translate-y-2',
-        n > 0 && !active && !isNotTutorial && 'not-hover:animate-bounce',
+        !active && bounce && 'not-hover:animate-bounce',
       ]"
     >
       <Icon key="action" :icon="icon" :class="['size-10', n === 0 && 'opacity-20']" />
