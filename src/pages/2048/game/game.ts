@@ -1,4 +1,5 @@
 import { type Direction, default as Board } from './board'
+import Tile from './tile'
 
 type Action = 'move' | 'swap' | 'remove'
 type History = [Action, string]
@@ -165,5 +166,18 @@ export default class Game {
       return true
     }
     return false
+  }
+
+  tutorial() {
+    this.running = true
+    this.score = 0
+    this.moves = 0
+    this.n_undo = 0
+    this.n_swap = 0
+    this.n_remove = 0
+    this.isWin = false
+    this.isFailed = false
+    this.board.data = [new Tile(2, 5), new Tile(2, 10)]
+    this.histories = []
   }
 }

@@ -68,6 +68,11 @@ class GameContext {
   removeTile(pos: number) {
     if (this.game.removeTile(pos)) this.markDirty()
   }
+
+  tutorial() {
+    this.game.tutorial()
+    this.markDirty()
+  }
 }
 
 const KEY = '_game'
