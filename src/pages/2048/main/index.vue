@@ -1,14 +1,14 @@
 <script setup lang="tsx">
-import { ref, computed, watch, inject } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
-import { type UseGameReturn } from '../game'
+import { useGame } from '../game3'
 import CBoard from './CBoard.vue'
 import CControl from './control/index.vue'
 
 const route = useRoute()
 
-const { running, score, moves, isWin, isFailed, newGame } = inject<UseGameReturn>('game')!
+const { running, score, moves, isWin, isFailed, newGame } = useGame()
 
 const continuePlay = ref(false)
 const showResult = computed(() => isFailed.value || (isWin.value && !continuePlay.value))

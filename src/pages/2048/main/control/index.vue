@@ -1,13 +1,13 @@
 <script setup lang="tsx">
-import { ref, computed, inject } from 'vue'
+import { ref, computed } from 'vue'
 
-import { type UseGameReturn } from '../../game'
+import { useGame } from '../../game3'
 import { useSelect } from '../../utils/select'
 import { useTutorial } from '../../utils/tutorial'
 import { message } from '../../message'
 import CButton from './CButton.vue'
 
-const { n_undo, n_swap, n_remove, undo, swapTile, removeTile } = inject<UseGameReturn>('game')!
+const { n_undo, n_swap, n_remove, undo, swapTile, removeTile } = useGame()
 
 const mode = ref<'remove' | 'swap' | 'normal'>('normal')
 

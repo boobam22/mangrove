@@ -1,13 +1,11 @@
 <script setup lang="tsx">
-import { type WatchSource, watch, provide, onMounted } from 'vue'
-import { useGame } from './game'
+import { type WatchSource, watch, onMounted } from 'vue'
+
+import { GameProvider } from './game3'
 import { useTutorial } from './utils/tutorial'
 import { useSelect } from './utils/select'
 import PageHeader from './header/index.vue'
 import PageMain from './main/index.vue'
-
-const game = useGame('tutorial')
-provide('game', game)
 
 const { step } = useTutorial()
 
@@ -24,28 +22,28 @@ function onChange(source: WatchSource): Promise<void> {
   })
 }
 
-game.newGame()
-game.board.value.tutorial()
-game.n_undo.value = 0
-game.n_swap.value = 0
-game.n_remove.value = 0
-step.value = 1
+// game.newGame()
+// game.board.value.tutorial()
+// game.n_undo.value = 0
+// game.n_swap.value = 0
+// game.n_remove.value = 0
+// step.value = 1
 
-onMounted(async () => {
-  await onChange(game.moves)
-  await onChange(game.score)
-  await onChange(() => game.board.value.data.findIndex((tile) => tile.value === 8))
-  await onChange(() => game.board.value.data.findIndex((tile) => tile.value === 16))
+// onMounted(async () => {
+//   await onChange(game.moves)
+//   await onChange(game.score)
+//   await onChange(() => game.board.value.data.findIndex((tile) => tile.value === 8))
+//   await onChange(() => game.board.value.data.findIndex((tile) => tile.value === 16))
 
-  game.running.value = false
-  game.n_undo.value = 1
-  await onChange(game.n_undo)
+//   game.running.value = false
+//   game.n_undo.value = 1
+//   await onChange(game.n_undo)
 
-  game.n_swap.value++
-  await onChange(game.n_swap)
-  game.n_undo.value = 0
-  step.value = 100
-})
+//   game.n_swap.value++
+//   await onChange(game.n_swap)
+//   game.n_undo.value = 0
+//   step.value = 100
+// })
 
 const { selecting } = useSelect()
 
@@ -68,77 +66,81 @@ function CNumber(props: { value: string }) {
 
 <template>
   <div class="select-none">
-    <div
-      v-if="step < 100 && !selecting"
-      class="fixed top-4 left-1/2 mx-auto w-110 -translate-x-1/2 rounded-xl bg-stone-700 p-4 text-lg text-slate-100"
-    >
-      <div v-if="step === 1">
-        <c-title text="Welcome to 2048" />
-        <p>Use the arrow keys to move the tiles.</p>
-        <div class="flex gap-2">
-          <c-arrow icon="ic:round-arrow-back" />
-          <c-arrow icon="ic:round-arrow-forward" />
-          <c-arrow icon="ic:round-arrow-downward" />
-          <c-arrow icon="ic:round-arrow-upward" />
+    <game-provider key2="2048.tutorial">
+      <div
+        v-if="step < 100 && !selecting"
+        class="fixed top-4 left-1/2 mx-auto w-110 -translate-x-1/2 rounded-xl bg-stone-700 p-4 text-lg text-slate-100"
+      >
+        <div v-if="step === 1">
+          <c-title text="Welcome to 2048" />
+          <p>Use the arrow keys to move the tiles.</p>
+          <div class="flex gap-2">
+            <c-arrow icon="ic:round-arrow-back" />
+            <c-arrow icon="ic:round-arrow-forward" />
+            <c-arrow icon="ic:round-arrow-downward" />
+            <c-arrow icon="ic:round-arrow-upward" />
+          </div>
         </div>
-      </div>
-      <div v-if="step === 2">
-        <c-title text="Make match" />
-        <p>The tiles all moved in the same direction and a new one appeared.</p>
-        <p>Try moving the <c-number value="2" /> and <c-number value="2" /> towards each other.</p>
-      </div>
-      <div v-if="step === 3">
-        <c-title text="Boom!" />
-        <p>Tiles with the same number join when they touch.</p>
-        <p>
-          Keep going. Can you merge two <c-number value="4" /> tiles into an
-          <c-number value="8" /> ?
-        </p>
-      </div>
-      <div v-if="step === 4">
-        <p class="mb-1">4 + 4 = 8</p>
-        <p>You're getting the hang of it!</p>
-        <p>
-          Let's increase the difficulty. Merge two <c-number value="8" /> tiles into a
-          <c-number value="16" /> tiles.
-        </p>
-      </div>
-      <div v-if="step === 5">
-        <c-title text="Need a do-over?" />
-        <p>If you make mistakes, you can use undo. Try it out!</p>
-      </div>
-      <div v-if="step === 6">
-        <c-title text="Powerups!" />
-        <p>Undo isn't the only powerup you can use. Try “Swap Two Tiles”!</p>
-      </div>
-    </div>
-    <teleport v-if="step === 100" to="body">
-      <div class="fixed top-0 z-10 h-full w-full bg-neutral-800/50">
-        <div
-          class="mx-auto mt-48 max-w-[500px] rounded-2xl bg-neutral-200 p-10 text-center text-lg text-yellow-900"
-        >
-          <h2 class="text-2xl font-bold">You’re Ready</h2>
-          <p>Keep merging the tiles until you get to <c-number value="2048" /></p>
-          <p>You'll earn powerups each time</p>
+        <div v-if="step === 2">
+          <c-title text="Make match" />
+          <p>The tiles all moved in the same direction and a new one appeared.</p>
           <p>
-            you create a <c-number value="128" /> , <c-number value="256" /> or
-            <c-number value="512" /> .
+            Try moving the <c-number value="2" /> and <c-number value="2" /> towards each other.
           </p>
-          <p>Use them wisely to help you along the way.</p>
-          <p class="textxl mt-2 font-bold">Good luck!</p>
-
-          <router-link
-            to="/2048"
-            class="mt-2 block w-full cursor-pointer rounded-lg border-2 bg-stone-500 py-2 text-slate-100"
-            @click="step = 1"
-          >
-            Start Playing
-          </router-link>
+        </div>
+        <div v-if="step === 3">
+          <c-title text="Boom!" />
+          <p>Tiles with the same number join when they touch.</p>
+          <p>
+            Keep going. Can you merge two <c-number value="4" /> tiles into an
+            <c-number value="8" /> ?
+          </p>
+        </div>
+        <div v-if="step === 4">
+          <p class="mb-1">4 + 4 = 8</p>
+          <p>You're getting the hang of it!</p>
+          <p>
+            Let's increase the difficulty. Merge two <c-number value="8" /> tiles into a
+            <c-number value="16" /> tiles.
+          </p>
+        </div>
+        <div v-if="step === 5">
+          <c-title text="Need a do-over?" />
+          <p>If you make mistakes, you can use undo. Try it out!</p>
+        </div>
+        <div v-if="step === 6">
+          <c-title text="Powerups!" />
+          <p>Undo isn't the only powerup you can use. Try “Swap Two Tiles”!</p>
         </div>
       </div>
-    </teleport>
+      <teleport v-if="step === 100" to="body">
+        <div class="fixed top-0 z-10 h-full w-full bg-neutral-800/50">
+          <div
+            class="mx-auto mt-48 max-w-[500px] rounded-2xl bg-neutral-200 p-10 text-center text-lg text-yellow-900"
+          >
+            <h2 class="text-2xl font-bold">You’re Ready</h2>
+            <p>Keep merging the tiles until you get to <c-number value="2048" /></p>
+            <p>You'll earn powerups each time</p>
+            <p>
+              you create a <c-number value="128" /> , <c-number value="256" /> or
+              <c-number value="512" /> .
+            </p>
+            <p>Use them wisely to help you along the way.</p>
+            <p class="textxl mt-2 font-bold">Good luck!</p>
 
-    <page-header></page-header>
-    <page-main></page-main>
+            <router-link
+              to="/2048"
+              class="mt-2 block w-full cursor-pointer rounded-lg border-2 bg-stone-500 py-2 text-slate-100"
+              @click="step = 1"
+            >
+              Start Playing
+            </router-link>
+          </div>
+        </div>
+      </teleport>
+
+      <page-header></page-header>
+      <page-main></page-main>
+    </game-provider>
   </div>
 </template>

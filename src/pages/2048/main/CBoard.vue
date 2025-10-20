@@ -1,11 +1,11 @@
 <script setup lang="tsx">
-import { reactive, ref, inject, onMounted, onBeforeUnmount, onActivated, onDeactivated } from 'vue'
+import { reactive, ref, onMounted, onBeforeUnmount, onActivated, onDeactivated } from 'vue'
 
-import { type UseGameReturn } from '../game'
-import { type Direction } from '../game/board'
+import { useGame } from '../game3'
+import { type Direction } from '../game3/board'
 import { useSelect } from '../utils/select'
 
-const { running, isFailed, board, handleMove } = inject<UseGameReturn>('game')!
+const { running, isFailed, board, handleMove } = useGame()
 
 onActivated(() => {
   running.value = true
@@ -106,7 +106,7 @@ function CTile(props: { value: number; pos: number }) {
     </ul>
     <transition-group name="tile" tag="ul">
       <c-tile
-        v-for="{ id, value, pos, removed } in board.data"
+        v-for="{ id, value, pos, removed } in board"
         :key="id"
         :value="value"
         :pos="pos"
