@@ -4,7 +4,7 @@ import PageMain from './main/index.vue'
 </script>
 
 <template>
-  <div class="select-none">
+  <div>
     <game-provider key2="2048.main">
       <page-main></page-main>
     </game-provider>

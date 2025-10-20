@@ -38,28 +38,30 @@ function CButton(props: { text: string; onClick?: () => void }) {
 </script>
 
 <template>
-  <select-provider>
-    <c-header></c-header>
+  <div class="select-none">
+    <select-provider>
+      <c-header></c-header>
 
-    <div v-if="showResult" class="mb-4 text-center text-lg text-yellow-900">
-      <h1 class="text-4xl font-bold">{{ isWin ? 'You Win' : 'Game Over' }}</h1>
-      <p>
-        <strong>{{ score }}</strong> points scored in <strong>{{ moves }}</strong> moves.
-      </p>
-    </div>
-
-    <c-board class="my-12" />
-
-    <div v-if="showResult" class="mt-8">
-      <div v-if="isFailed">
-        <c-button text="Play Again" @click="newGame" />
+      <div v-if="showResult" class="mb-4 text-center text-lg text-yellow-900">
+        <h1 class="text-4xl font-bold">{{ isWin ? 'You Win' : 'Game Over' }}</h1>
+        <p>
+          <strong>{{ score }}</strong> points scored in <strong>{{ moves }}</strong> moves.
+        </p>
       </div>
-      <div v-else>
-        <c-button text="Continue Play" @click="((continuePlay = true), (running = true))" />
-        <c-button text="New Game" @click="newGame" />
-      </div>
-    </div>
 
-    <c-control v-else-if="route.path !== '/2048/classic'"></c-control>
-  </select-provider>
+      <c-board class="my-12" />
+
+      <div v-if="showResult" class="mt-8">
+        <div v-if="isFailed">
+          <c-button text="Play Again" @click="newGame" />
+        </div>
+        <div v-else>
+          <c-button text="Continue Play" @click="((continuePlay = true), (running = true))" />
+          <c-button text="New Game" @click="newGame" />
+        </div>
+      </div>
+
+      <c-control v-else-if="route.path !== '/2048/classic'"></c-control>
+    </select-provider>
+  </div>
 </template>
