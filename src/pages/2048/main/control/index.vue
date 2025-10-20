@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 
 import { useGame } from '../../game'
-import { useSelect } from '../../utils/select'
+import { useSelect } from '../../select'
 import { useTutorial } from '../../utils/tutorial'
 import { message } from '../../message'
 import CButton from './CButton.vue'

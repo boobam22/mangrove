@@ -3,6 +3,8 @@ import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useGame } from '../game'
+import { SelectProvider } from '../select'
+import CHeader from '../header/index.vue'
 import CBoard from './CBoard.vue'
 import CControl from './control/index.vue'
 
@@ -36,7 +38,9 @@ function CButton(props: { text: string; onClick?: () => void }) {
 </script>
 
 <template>
-  <div class="my-24">
+  <select-provider>
+    <c-header></c-header>
+
     <div v-if="showResult" class="mb-4 text-center text-lg text-yellow-900">
       <h1 class="text-4xl font-bold">{{ isWin ? 'You Win' : 'Game Over' }}</h1>
       <p>
@@ -44,7 +48,7 @@ function CButton(props: { text: string; onClick?: () => void }) {
       </p>
     </div>
 
-    <c-board />
+    <c-board class="my-12" />
 
     <div v-if="showResult" class="mt-8">
       <div v-if="isFailed">
@@ -57,5 +61,5 @@ function CButton(props: { text: string; onClick?: () => void }) {
     </div>
 
     <c-control v-else-if="route.path !== '/2048/classic'"></c-control>
-  </div>
+  </select-provider>
 </template>

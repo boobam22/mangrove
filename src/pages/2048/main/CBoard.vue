@@ -3,7 +3,7 @@ import { reactive, ref, onMounted, onBeforeUnmount, onActivated, onDeactivated }
 
 import { useGame } from '../game'
 import { type Direction } from '../game/board'
-import { useSelect } from '../utils/select'
+import { useSelect } from '../select'
 
 const { running, isFailed, board, handleMove } = useGame()
 
