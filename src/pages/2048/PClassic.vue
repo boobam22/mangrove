@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { GameProvider } from './game3'
+import { GameProvider } from './game'
 import PageHeader from './header/index.vue'
 import PageMain from './main/index.vue'
 </script>

@@ -1,8 +1,8 @@
 <script setup lang="tsx">
 import { reactive, ref, onMounted, onBeforeUnmount, onActivated, onDeactivated } from 'vue'
 
-import { useGame } from '../game3'
-import { type Direction } from '../game3/board'
+import { useGame } from '../game'
+import { type Direction } from '../game/board'
 import { useSelect } from '../utils/select'
 
 const { running, isFailed, board, handleMove } = useGame()

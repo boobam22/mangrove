@@ -1,7 +1,7 @@
 <script setup lang="tsx">
 import { ref, computed } from 'vue'
 
-import { useGame } from '../../game3'
+import { useGame } from '../../game'
 import { useSelect } from '../../utils/select'
 import { useTutorial } from '../../utils/tutorial'
 import { message } from '../../message'

@@ -1,7 +1,7 @@
 <script setup lang="tsx">
 import { type WatchSource, watch, onMounted } from 'vue'
 
-import { GameProvider } from './game3'
+import { GameProvider } from './game'
 import { useTutorial } from './utils/tutorial'
 import { useSelect } from './utils/select'
 import PageHeader from './header/index.vue'

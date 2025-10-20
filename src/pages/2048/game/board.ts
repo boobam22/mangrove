@@ -1,12 +1,9 @@
-import { markRaw } from 'vue'
-
 import Tile from './tile'
 
 export type Direction = 'up' | 'down' | 'left' | 'right'
 
 export default class Board {
   data = Array<Tile>()
-  private registry = markRaw(Array<Tile>(16).fill(Tile.EMPTY))
 
   toJSON() {
     return this.data
@@ -18,55 +15,39 @@ export default class Board {
   static fromJSON(s: string) {
     const board = new Board()
 
-    let id = 0
-    const data = s
+    board.data = s
       .split(';')
       .map((s) => Tile.fromJSON(s))
-      .filter((tile) => {
-        id = Math.max(id, tile.id)
-        return tile.value
-      })
-    Tile.count = id + 1
-    board.push(...data)
+      .filter((tile) => tile.value)
+
     return board
   }
 
-  load(s: string) {
-    this.clear()
-    this.push(...Board.fromJSON(s).data)
-  }
-
-  private push(...tiles: Tile[]) {
-    this.data.push(...tiles)
-    tiles.forEach((tile) => {
-      this.registry[tile.pos] = tile
-    })
-  }
-
-  clear() {
-    this.data.splice(0, this.data.length)
-    this.registry.fill(Tile.EMPTY)
+  private flatten() {
+    return this.data
+      .filter((tile) => !tile.removed)
+      .reduce((x16, tile) => {
+        x16[tile.pos] = tile
+        return x16
+      }, Array<Tile>(16).fill(Tile.EMPTY))
   }
 
   swap(pos1: number, pos2: number) {
-    const tile1 = this.registry[pos1]!
-    const tile2 = this.registry[pos2]!
+    const x16 = this.flatten()
+    const tile1 = x16[pos1]!
+    const tile2 = x16[pos2]!
 
     if (tile1.value && tile2.value && tile1.value !== tile2.value) {
-      this.data.find((it) => tile1.id === it.id)!.pos = pos2
-      this.data.find((it) => tile2.id === it.id)!.pos = pos1
-      this.registry[pos1] = tile2
-      this.registry[pos2] = tile1
+      tile1.move(pos2)
+      tile2.move(pos1)
       return true
     }
     return false
   }
 
   remove(pos: number) {
-    const tile = this.registry[pos]!
-    if (tile.value) {
-      this.registry[pos] = Tile.EMPTY
-      const idx = this.data.findIndex((it) => tile.id === it.id)
+    const idx = this.data.findIndex((tile) => !tile.removed && tile.pos === pos)
+    if (idx !== -1) {
       this.data.splice(idx, 1)
       return true
     }
@@ -74,7 +55,7 @@ export default class Board {
   }
 
   addTile(n = 1) {
-    const emptyPos = this.registry
+    const emptyPos = this.flatten()
       .map((tile, idx) => (tile.value ? -1 : idx))
       .filter((idx) => idx !== -1)
 
@@ -83,7 +64,7 @@ export default class Board {
       if (emptyPos.length > 0) {
         const idx = Math.floor(Math.random() * emptyPos.length)
         const pos = emptyPos.splice(idx, 1)[0]
-        this.push(new Tile(Math.random() > 0.8 ? 4 : 2, pos))
+        this.data.push(new Tile(Math.random() > 0.8 ? 4 : 2, pos))
         count++
       }
     }
@@ -91,30 +72,12 @@ export default class Board {
     return count
   }
 
-  private moveTile(tile: Tile, pos: number) {
-    if (tile.pos === pos) return false
-
-    this.registry[tile.pos] = Tile.EMPTY
-    this.registry[pos] = tile
-    tile.pos = pos
-    return true
-  }
-
-  private mergeTile(tile1: Tile, tile2: Tile, pos: number) {
-    this.moveTile(tile1, pos)
-    this.moveTile(tile2, pos)
-
-    tile1.removed = tile2.removed = true
-    const merged = new Tile(tile1.value + tile2.value, pos)
-    this.push(merged)
-    return merged
-  }
-
   canMove() {
+    const x16 = this.flatten()
     for (let i = 0; i < 16; i++) {
-      const tile = this.registry[i]!
-      const rightTile = (i + 1) % 4 ? this.registry[i + 1]! : Tile.EMPTY
-      const downTile = i < 12 ? this.registry[i + 4]! : Tile.EMPTY
+      const tile = x16[i]!
+      const rightTile = (i + 1) % 4 ? x16[i + 1]! : Tile.EMPTY
+      const downTile = i < 12 ? x16[i + 4]! : Tile.EMPTY
 
       if (!tile.value || tile.equals(rightTile) || tile.equals(downTile)) {
         return true
@@ -127,30 +90,33 @@ export default class Board {
     let dirty = false
     const merges = Array<number>()
 
+    const x16 = this.flatten()
     for (let i of edges) {
       let cursor = Tile.EMPTY
       let pos = i
       for (let j = 0; j < 4; j++, i += step) {
-        const tile = this.registry[i]!
+        const tile = x16[i]!
         if (!tile.value) {
           continue
         } else if (!cursor.value) {
           cursor = tile
-        } else if (tile.equals(cursor)) {
-          const merged = this.mergeTile(cursor, tile, pos)
+        } else if (cursor.equals(tile)) {
+          cursor.move(pos)
+          const merged = cursor.merge(tile)
           pos += step
           cursor = Tile.EMPTY
           dirty = true
+          this.data.push(merged)
           merges.push(merged.value)
         } else {
-          dirty = this.moveTile(cursor, pos) || dirty
+          dirty = cursor.move(pos) || dirty
           pos += step
           cursor = tile
         }
       }
 
       if (cursor.value) {
-        dirty = this.moveTile(cursor, pos) || dirty
+        dirty = cursor.move(pos) || dirty
       }
     }
 
@@ -168,10 +134,5 @@ export default class Board {
       case 'right':
         return this.move([3, 7, 11, 15], -1)
     }
-  }
-
-  tutorial() {
-    this.clear()
-    this.push(new Tile(2, 5), new Tile(2, 10))
   }
 }

@@ -2,7 +2,7 @@
 import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
-import { useGame } from '../game3'
+import { useGame } from '../game'
 import CBoard from './CBoard.vue'
 import CControl from './control/index.vue'
 
