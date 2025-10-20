@@ -22,15 +22,22 @@ function clickSwap() {
   if (!n_swap.value || mode.value === 'swap') return
   mode.value = 'swap'
 
-  const close = message({
-    title: 'SWAP TWO TILES',
-    desc: computed(
-      () => `Choose the ${selected.value.length === 1 ? 'second' : 'first'} tile`,
-    ) as unknown as string,
-    buttonText: 'cancel',
-    duration: 0,
-    onClose: cancel,
-  })
+  const close = message(
+    {
+      title: 'SWAP TWO TILES',
+      buttonText: 'cancel',
+      duration: 0,
+      onClose: cancel,
+    },
+    {
+      desc() {
+        const text = computed(
+          () => `Choose the ${selected.value.length === 1 ? 'second' : 'first'} tile`,
+        )
+        return <p>{text.value}</p>
+      },
+    },
+  )
 
   waitUntil(() => selected.value.length === 2 || mode.value !== 'swap')
     .then((idxs) => {

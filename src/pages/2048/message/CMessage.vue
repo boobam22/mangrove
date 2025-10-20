@@ -21,7 +21,8 @@ if (props.duration > 0) {
   >
     <div class="flex min-h-12 min-w-48 flex-col justify-center text-lg text-slate-100">
       <h1 class="text-lg font-bold">{{ title }}</h1>
-      <p>{{ desc }}</p>
+      <p v-if="desc">{{ desc }}</p>
+      <slot v-else name="desc"></slot>
     </div>
     <button
       class="min-w-16 cursor-pointer rounded bg-stone-300 px-2 text-xl text-stone-900"
