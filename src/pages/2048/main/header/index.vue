@@ -1,8 +1,8 @@
 <script setup lang="tsx">
 import { type SetupContext, ref, watch } from 'vue'
 
-import { useGame } from '../game'
-import { useTutorial } from '../utils/tutorial'
+import { useGame } from '../../game'
+import { useTutorial } from '../../utils/tutorial'
 import { showNewGameConfirm } from './confirm'
 import CMenu from './CMenu.vue'
 import CScore from './CScore.vue'

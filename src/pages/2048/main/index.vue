@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router'
 
 import { useGame } from '../game'
 import { SelectProvider } from '../select'
-import CHeader from '../header/index.vue'
+import CHeader from './header/index.vue'
 import CBoard from './CBoard.vue'
 import CControl from './control/index.vue'
 
