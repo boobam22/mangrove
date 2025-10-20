@@ -137,8 +137,8 @@ export default class Game {
 
   undo() {
     if (this.n_undo && this.histories.length) {
-      this.n_undo--
       this.loadSnapshot()
+      this.n_undo--
       return true
     }
     return false
