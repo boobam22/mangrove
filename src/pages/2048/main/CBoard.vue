@@ -6,6 +6,7 @@ import { type Direction } from '../game/board'
 import { useSelect } from '../select'
 
 const { running, isFailed, board, handleMove } = useGame()
+const { selecting, selected, select, unselect } = useSelect()
 
 onActivated(() => {
   running.value = true
@@ -16,7 +17,7 @@ onDeactivated(() => {
 })
 
 window.addEventListener('keydown', (e) => {
-  if (!running.value || isFailed.value) return
+  if (!running.value || isFailed.value || selecting.value) return
 
   let direction: Direction
   switch (e.key) {
@@ -68,8 +69,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   if (observer) observer.disconnect()
 })
-
-const { selecting, selected, select, unselect } = useSelect()
 
 function clickTile(pos: number) {
   if (!selecting.value) return
