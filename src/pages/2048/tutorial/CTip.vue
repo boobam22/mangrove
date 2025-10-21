@@ -21,7 +21,7 @@ function onChange(source: WatchSource): Promise<void> {
   })
 }
 
-const { running, moves, score, n_undo, n_swap, board, tutorial } = useGame()
+const { running, moves, score, nUndo, nSwap, board, tutorial } = useGame()
 tutorial()
 
 onMounted(async () => {
@@ -31,8 +31,8 @@ onMounted(async () => {
   await onChange(() => board.value.findIndex((tile) => tile.value === 16))
 
   running.value = false
-  await onChange(n_undo)
-  await onChange(n_swap)
+  await onChange(nUndo)
+  await onChange(nSwap)
   step.value = 100
 })
 
