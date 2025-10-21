@@ -76,8 +76,8 @@ function MenuEntry(_: unknown, { slots }: SetupContext) {
           </div>
         </menu-entry>
         <div v-if="isNotTutorial" class="flex-between gap-3">
-          <c-score label="SCORE" :value="score" show-delta class="score flex-1 bg-stone-200" />
-          <c-score label="BEST" :value="best" class="score flex-1 border-3 border-stone-200" />
+          <c-score label="SCORE" :value="score" show-delta class="score bg-stone-200" />
+          <c-score label="BEST" :value="best" class="score border-3 border-stone-200" />
         </div>
         <div
           v-if="isNotTutorial"
