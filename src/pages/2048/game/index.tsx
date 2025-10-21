@@ -1,4 +1,4 @@
-import { type SetupContext, type Ref, defineComponent, ref, provide, inject } from 'vue'
+import { type Ref, defineComponent, ref, provide, inject } from 'vue'
 
 import { useLocalStorage, LocalStorageProvider } from '@/components/provider/localStorage'
 import Game from './game'
@@ -97,10 +97,13 @@ export function useGame() {
   return context
 }
 
-export function GameProvider({ key2 }: { key2: string }, { slots }: SetupContext) {
-  return (
-    <LocalStorageProvider storageKey={key2}>
-      <_GameProvider>{slots.default?.()}</_GameProvider>
-    </LocalStorageProvider>
-  )
-}
+export const GameProvider = defineComponent({
+  props: { storageKey: { type: String, required: true } },
+  setup({ storageKey }, { slots }) {
+    return () => (
+      <LocalStorageProvider storageKey={storageKey}>
+        <_GameProvider>{slots.default?.()}</_GameProvider>
+      </LocalStorageProvider>
+    )
+  },
+})

@@ -5,7 +5,7 @@ import PageMain from './main/index.vue'
 
 <template>
   <div>
-    <game-provider key2="2048.classic">
+    <game-provider storage-key="2048.classic">
       <page-main></page-main>
     </game-provider>
   </div>
