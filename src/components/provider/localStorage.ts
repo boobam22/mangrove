@@ -18,8 +18,7 @@ export const LocalStorageProvider = defineComponent({
     defaultValue: { type: String, default: '' },
   },
   setup({ storageKey, defaultValue }, { slots }) {
-    const initValue = window.localStorage.getItem(storageKey) ?? defaultValue
-    const storageValue = ref(initValue)
+    const storageValue = ref(window.localStorage.getItem(storageKey) ?? defaultValue)
     provide(KEY, storageValue)
 
     watch(storageValue, (newValue) => {
@@ -28,7 +27,7 @@ export const LocalStorageProvider = defineComponent({
 
     function handleStorage(e: StorageEvent) {
       if (e.key === storageKey) {
-        storageValue.value = e.newValue ?? initValue
+        storageValue.value = e.newValue ?? defaultValue
       }
     }
 
