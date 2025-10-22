@@ -7,7 +7,7 @@ import { useTutorial } from '../../tutorial'
 import { message } from '../../message'
 import CButton from './CButton.vue'
 
-const { n_undo, n_swap, n_remove, undo, swapTile, removeTile } = useGame()
+const { nUndo, nSwap, nRemove, undo, swapTile, removeTile } = useGame()
 
 const mode = ref<'remove' | 'swap' | 'normal'>('normal')
 
@@ -19,18 +19,25 @@ function clickUndo() {
 }
 
 function clickSwap() {
-  if (!n_swap.value || mode.value === 'swap') return
+  if (!nSwap.value || mode.value === 'swap') return
   mode.value = 'swap'
 
-  const close = message({
-    title: 'SWAP TWO TILES',
-    desc: computed(
-      () => `Choose the ${selected.value.length === 1 ? 'second' : 'first'} tile`,
-    ) as unknown as string,
-    buttonText: 'cancel',
-    duration: 0,
-    onClose: cancel,
-  })
+  const close = message(
+    {
+      title: 'SWAP TWO TILES',
+      buttonText: 'cancel',
+      duration: 0,
+      onClose: cancel,
+    },
+    {
+      desc() {
+        const text = computed(
+          () => `Choose the ${selected.value.length === 1 ? 'second' : 'first'} tile`,
+        )
+        return <p>{text.value}</p>
+      },
+    },
+  )
 
   waitUntil(() => selected.value.length === 2 || mode.value !== 'swap')
     .then((idxs) => {
@@ -43,7 +50,7 @@ function clickSwap() {
 }
 
 function clickRemove() {
-  if (!n_remove.value || mode.value === 'remove') return
+  if (!nRemove.value || mode.value === 'remove') return
   mode.value = 'remove'
 
   const close = message({
@@ -80,7 +87,7 @@ const { step, isNotTutorial } = useTutorial()
       icon="ic:baseline-undo"
       title="UNDO"
       desc="Make a 128 tile to get more uses"
-      :n="n_undo"
+      :n="nUndo"
       :bounce="step === 5"
       @click="clickUndo"
     />
@@ -90,7 +97,7 @@ const { step, isNotTutorial } = useTutorial()
       title="SWAP TWO TILES"
       desc="Make a 512 tile to get more uses"
       :active="mode === 'swap'"
-      :n="n_swap"
+      :n="nSwap"
       :bounce="step === 6"
       @click="clickSwap"
       @cancel="cancel"
@@ -101,7 +108,7 @@ const { step, isNotTutorial } = useTutorial()
       title="DELETE TILE BY NUMBER"
       desc="Make a 1024 tile to get more uses"
       :active="mode === 'remove'"
-      :n="n_remove"
+      :n="nRemove"
       @click="clickRemove"
       @cancel="cancel"
     />

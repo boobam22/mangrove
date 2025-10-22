@@ -6,7 +6,7 @@ import PageMain from './main/index.vue'
 
 <template>
   <div>
-    <game-provider key2="2048.tutorial">
+    <game-provider storage-key="2048.tutorial">
       <tutorial-provider>
         <page-main></page-main>
       </tutorial-provider>

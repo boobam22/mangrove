@@ -11,9 +11,9 @@ export default class Game {
   score = 0
   best = 0
   moves = 0
-  n_undo = 0
-  n_swap = 0
-  n_remove = 0
+  nUndo = 0
+  nSwap = 0
+  nRemove = 0
   isWin = false
   isFailed = false
   board = new Board()
@@ -62,16 +62,16 @@ export default class Game {
     this.running = true
     this.score = 0
     this.moves = 0
-    this.n_undo = 2
-    this.n_swap = 1
-    this.n_remove = 0
+    this.nUndo = 2
+    this.nSwap = 1
+    this.nRemove = 0
     this.isWin = false
     this.isFailed = false
     this.board.data = []
     this.histories = []
 
     if (import.meta.env.DEV) {
-      this.n_undo = this.n_swap = this.n_remove = 100
+      this.nUndo = this.nSwap = this.nRemove = 100
     }
 
     this.board.addTile(3)
@@ -85,7 +85,7 @@ export default class Game {
         const type = this.histories.pop()![0]
         len--
         if (type !== 'move') {
-          this.n_undo--
+          this.nUndo--
         }
       }
     }
@@ -111,11 +111,11 @@ export default class Game {
       merges.forEach((value) => {
         score += value
         if (value === 128) {
-          this.n_undo++
+          this.nUndo++
         } else if (value === 512) {
-          this.n_swap++
+          this.nSwap++
         } else if (value === 1024) {
-          this.n_remove++
+          this.nRemove++
         } else if (!this.isWin && value === 2048) {
           this.isWin = true
         }
@@ -136,9 +136,9 @@ export default class Game {
   }
 
   undo() {
-    if (this.n_undo && this.histories.length) {
+    if (this.nUndo && this.histories.length) {
       this.loadSnapshot()
-      this.n_undo--
+      this.nUndo--
       return true
     }
     return false
@@ -146,10 +146,10 @@ export default class Game {
 
   swapTile(pos1: number, pos2: number) {
     this.clearRemovedTiles()
-    if (this.n_swap && this.board.swap(pos1, pos2)) {
+    if (this.nSwap && this.board.swap(pos1, pos2)) {
       this.moves += 4
-      this.n_swap--
-      this.n_undo++
+      this.nSwap--
+      this.nUndo++
       this.record('swap')
       return true
     }
@@ -158,10 +158,10 @@ export default class Game {
 
   removeTile(pos: number) {
     this.clearRemovedTiles()
-    if (this.n_remove && this.board.remove(pos)) {
+    if (this.nRemove && this.board.remove(pos)) {
       this.moves += 8
-      this.n_remove--
-      this.n_undo++
+      this.nRemove--
+      this.nUndo++
       this.record('remove')
       return true
     }

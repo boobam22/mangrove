@@ -1,5 +1,5 @@
 <script setup lang="tsx">
-import { type SetupContext, ref, watch } from 'vue'
+import { type SetupContext, ref } from 'vue'
 
 import { useGame } from '../../game'
 import { useTutorial } from '../../tutorial'
@@ -10,10 +10,6 @@ import CScore from './CScore.vue'
 const { isNotTutorial } = useTutorial()
 
 const { running, score, best, newGame } = useGame()
-
-watch(score, (newValue) => {
-  best.value = Math.max(newValue, best.value)
-})
 
 function confirmAndNewGame() {
   const oldValue = running.value
@@ -80,8 +76,8 @@ function MenuEntry(_: unknown, { slots }: SetupContext) {
           </div>
         </menu-entry>
         <div v-if="isNotTutorial" class="flex-between gap-3">
-          <c-score label="SCORE" :value="score" show-delta class="score flex-1 bg-stone-200" />
-          <c-score label="BEST" :value="best" class="score flex-1 border-3 border-stone-200" />
+          <c-score label="SCORE" :value="score" show-delta class="score bg-stone-200" />
+          <c-score label="BEST" :value="best" class="score border-3 border-stone-200" />
         </div>
         <div
           v-if="isNotTutorial"
